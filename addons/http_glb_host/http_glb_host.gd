@@ -8,7 +8,7 @@ extends EditorPlugin
 
 var glb_data: PackedByteArray = PackedByteArray()
 var http_server: TCPServer
-const PORT = 8081
+const PORT = 8080
 
 func _enter_tree():
 	http_server = TCPServer.new()
