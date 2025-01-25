@@ -10,10 +10,10 @@ var glb_data: PackedByteArray = PackedByteArray()
 var http_server: TCPServer
 const PORT = 8080
 
-var MSFT_texture_dds : GLTFDocumentExtension = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
+var EXT_voyage_exporter : GLTFDocumentExtension = preload("res://addons/http_glb_host/EXT_voyage_exporter.gd").new()
 
 func _enter_tree():
-	GLTFDocument.register_gltf_document_extension(MSFT_texture_dds)
+	GLTFDocument.register_gltf_document_extension(EXT_voyage_exporter)
 	print(GLTFDocument.get_supported_gltf_extensions())
 	http_server = TCPServer.new()
 	var err_http: Error = http_server.listen(PORT)
@@ -22,7 +22,7 @@ func _enter_tree():
 		return
 
 func _exit_tree():
-	GLTFDocument.unregister_gltf_document_extension(MSFT_texture_dds)
+	GLTFDocument.unregister_gltf_document_extension(EXT_voyage_exporter)
 	if not http_server:
 		return
 	http_server.stop()
