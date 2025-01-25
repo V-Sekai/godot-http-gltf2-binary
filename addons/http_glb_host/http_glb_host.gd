@@ -37,6 +37,7 @@ func _process(delta):
 	else:
 		http_client.disconnect_from_host()
 		return
+	print(request)
 	if not request.begins_with("GET /model.glb"):
 		print("Invalid request received.")
 		var error_response = "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nInvalid request."
