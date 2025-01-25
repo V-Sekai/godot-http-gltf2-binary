@@ -38,13 +38,17 @@ func  _get_saveable_image_formats() ->  PackedStringArray:
 func _serialize_image_to_bytes(state: GLTFState, image: Image, image_dict: Dictionary, image_format: String, lossy_quality: float) -> PackedByteArray:
 	if image_format == "DDS":
 		image_dict["mimeType"] = "image/vnd-ms.dds"
+		if not image.has_mipmaps():
+			image.generate_mipmaps()
 		if not image.is_compressed():
 			image.compress_from_channels(Image.COMPRESS_S3TC, Image.USED_CHANNELS_RGBA)
 		return image.save_dds_to_buffer()
 	return PackedByteArray()
 
 func _save_image_at_path(state: GLTFState, image: Image, file_path: String, image_format: String, _lossy_quality: float) -> Error:
-	if image_format == "PNG":
+	if image_format == "DDS":
+		if not image.has_mipmaps():
+			image.generate_mipmaps()
 		if not image.is_compressed():
 			image.compress_from_channels(Image.COMPRESS_S3TC, Image.USED_CHANNELS_RGBA)
 		return image.save_dds(file_path)
