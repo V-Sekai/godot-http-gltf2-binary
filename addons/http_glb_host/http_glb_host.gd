@@ -42,7 +42,7 @@ func _process(delta):
 	else:
 		http_client.disconnect_from_host()
 		return
-	if not request.begins_with("GET /model.glb"):
+	if not request.begins_with("GET /"):
 		print("Invalid request received.")
 		var error_response = "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nInvalid request."
 		http_client.put_data(error_response.to_utf8_buffer())
@@ -61,7 +61,7 @@ func _process(delta):
 	
 	if glb_data.size() > 0:
 		print("Serving GLB data to client.")
-		var response: String = "HTTP/1.1 200 OK\r\nContent-Type: model/gltf-binary\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % glb_data.size()
+		var response: String = "HTTP/1.1 200 OK\r\nContent-Type: model/gltf-binary\r\nContent-Disposition: attachment; filename=\"model.glb\"\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % glb_data.size()
 		http_client.put_data(response.to_utf8_buffer())
 		http_client.put_data(glb_data)
 	else:
