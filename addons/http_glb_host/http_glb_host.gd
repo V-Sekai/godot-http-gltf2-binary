@@ -6,7 +6,6 @@
 @tool
 extends EditorPlugin
 
-var glb_data: PackedByteArray = PackedByteArray()
 var http_server: TCPServer
 const PORT = 8080
 
@@ -49,13 +48,14 @@ func _process(delta):
 	gltf_doc.image_format = "DDS"
 	var state: GLTFState = GLTFState.new()
 	var flags: int = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
+	# TODO: Async duplicate the tree. fire 2025-01-25
 	var error: Error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state, flags)
+	var glb_data: PackedByteArray = PackedByteArray()
 	if error != OK:
 		glb_data = PackedByteArray()
 		push_error("GLTF export error: " + str(error))
 	else:
 		glb_data = gltf_doc.generate_buffer(state)
-	
 	if glb_data.size() > 0:
 		var response: String = "HTTP/1.1 200 OK\r\nContent-Type: model/gltf-binary\r\nContent-Disposition: attachment; filename=\"model.glb\"\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % glb_data.size()
 		http_client.put_data(response.to_utf8_buffer())
