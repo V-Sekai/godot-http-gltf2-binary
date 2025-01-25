@@ -7,7 +7,6 @@
 extends EditorPlugin
 
 func _enter_tree():
-	print("MSG_PLUGIN_ENTERED")
 	var editor_settings = EditorInterface.get_editor_settings()
 	http_server = TCPServer.new()
 	var err_http = http_server.listen(PORT)
@@ -17,7 +16,6 @@ func _enter_tree():
 	is_running = true
 
 func _exit_tree():
-	print("MSG_PLUGIN_EXITING")
 	if not http_server:
 		return
 	http_server.stop()
@@ -35,7 +33,6 @@ func _process(delta):
 	var http_client: StreamPeerTCP = http_server.take_connection()
 	if not http_client:
 		return
-	print("Handling new client connection.")
 	var request
 	if http_client.get_available_bytes() > 0:
 		request = http_client.get_utf8_string(http_client.get_available_bytes()).strip_edges()
@@ -43,12 +40,10 @@ func _process(delta):
 		http_client.disconnect_from_host()
 		return
 	if not request.begins_with("GET /"):
-		print("Invalid request received.")
 		var error_response = "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nInvalid request."
 		http_client.put_data(error_response.to_utf8_buffer())
 		http_client.disconnect_from_host()
 		return
-	print("Exporting scene to GLB.")
 	var gltf_doc = GLTFDocument.new()
 	var state = GLTFState.new()
 	var error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state)
@@ -57,15 +52,12 @@ func _process(delta):
 		push_error("GLTF export error: " + str(error))
 	else:
 		glb_data = gltf_doc.generate_buffer(state)
-		print("GLB data generated successfully.")
 	
 	if glb_data.size() > 0:
-		print("Serving GLB data to client.")
 		var response: String = "HTTP/1.1 200 OK\r\nContent-Type: model/gltf-binary\r\nContent-Disposition: attachment; filename=\"model.glb\"\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % glb_data.size()
 		http_client.put_data(response.to_utf8_buffer())
 		http_client.put_data(glb_data)
 	else:
-		print("GLB data not available.")
 		var error_response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nGLB data not available."
 		http_client.put_data(error_response.to_utf8_buffer())
 	
