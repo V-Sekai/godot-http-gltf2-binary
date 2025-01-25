@@ -10,7 +10,11 @@ var glb_data: PackedByteArray = PackedByteArray()
 var http_server: TCPServer
 const PORT = 8080
 
+var MSFT_texture_dds : GLTFDocumentExtension = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
+
 func _enter_tree():
+	GLTFDocument.register_gltf_document_extension(MSFT_texture_dds)
+	print(GLTFDocument.get_supported_gltf_extensions())
 	http_server = TCPServer.new()
 	var err_http: Error = http_server.listen(PORT)
 	if err_http != OK:
@@ -18,6 +22,7 @@ func _enter_tree():
 		return
 
 func _exit_tree():
+	GLTFDocument.unregister_gltf_document_extension(MSFT_texture_dds)
 	if not http_server:
 		return
 	http_server.stop()
@@ -35,7 +40,7 @@ func _process(delta):
 	else:
 		http_client.disconnect_from_host()
 		return
-	if not request.begins_with("GET /"):
+	if not request.begins_with("GET / "):
 		var error_response = "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nInvalid request."
 		http_client.put_data(error_response.to_utf8_buffer())
 		http_client.disconnect_from_host()
