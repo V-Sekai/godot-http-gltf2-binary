@@ -42,8 +42,7 @@ func _process(delta):
 		return
 	var gltf_doc: GLTFDocument = GLTFDocument.new()
 	var state: GLTFState = GLTFState.new()
-	var flags: int = 0 
-	flags = flags | EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
+	var flags: int = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
 	var error: Error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state, flags)
 	if error != OK:
 		glb_data = PackedByteArray()
