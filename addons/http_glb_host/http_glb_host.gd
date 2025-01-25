@@ -1,3 +1,8 @@
+# Copyright (c) 2025-present. This file is part of V-Sekai https://v-sekai.org/.
+# K. S. Ernest (Fire) Lee & Contributors
+# http_glb_host.gd
+# SPDX-License-Identifier: MIT
+
 @tool
 extends EditorPlugin
 

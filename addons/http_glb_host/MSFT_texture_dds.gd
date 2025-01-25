@@ -1,3 +1,8 @@
+# Copyright (c) 2025-present. This file is part of V-Sekai https://v-sekai.org/.
+# K. S. Ernest (Fire) Lee & Contributors
+# MSFT_texture_dds.gd
+# SPDX-License-Identifier: MIT
+
 extends GLTFDocumentExtension
 
 ## This class implements the MSFT_texture_dds extension for GLTF documents.
