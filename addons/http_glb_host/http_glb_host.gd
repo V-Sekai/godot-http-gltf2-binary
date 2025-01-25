@@ -9,11 +9,7 @@ extends EditorPlugin
 var http_server: TCPServer
 const PORT = 8080
 
-var MSFT_texture_dds : GLTFDocumentExtension = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
-
 func _enter_tree():
-	GLTFDocument.register_gltf_document_extension(MSFT_texture_dds)
-	print(GLTFDocument.get_supported_gltf_extensions())
 	http_server = TCPServer.new()
 	var err_http: Error = http_server.listen(PORT)
 	if err_http != OK:
@@ -21,7 +17,6 @@ func _enter_tree():
 		return
 
 func _exit_tree():
-	GLTFDocument.unregister_gltf_document_extension(MSFT_texture_dds)
 	if not http_server:
 		return
 	http_server.stop()
@@ -45,7 +40,6 @@ func _process(delta):
 		http_client.disconnect_from_host()
 		return
 	var gltf_doc: GLTFDocument = GLTFDocument.new()
-	gltf_doc.image_format = "DDS"
 	var state: GLTFState = GLTFState.new()
 	var flags: int = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
 	# TODO: Async duplicate the tree. fire 2025-01-25
