@@ -10,12 +10,6 @@ func _import_preflight(state: GLTFState, extensions: PackedStringArray) -> Error
 		return ERR_SKIP;
 	return OK;
 
-func _export_post(state: GLTFState) -> Error:
-	var used_extensions: Array = state.json.get("usedExtensions", Array())
-	used_extensions.append("MSFT_texture_dds")
-	state.json["usedExtensions"] = used_extensions
-	return OK
-
 func _get_supported_extensions() -> PackedStringArray:
 	return ["MSFT_texture_dds"]
 
