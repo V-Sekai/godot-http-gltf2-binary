@@ -17,6 +17,6 @@ tailscale funnel 8080
 
 ## Test world
 
-You can test the loader in the following world :
+You can test the [vr-voyage/vrchat-glb-loader](https://github.com/vr-voyage/vrchat-glb-loader) in the following world :
 
 https://vrchat.com/home/launch?worldId=wrld_a74abb7d-a423-44bb-a7ea-3bc5e8281dde
