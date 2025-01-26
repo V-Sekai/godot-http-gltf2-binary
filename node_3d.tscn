@@ -1,17 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://chipqxppmffef"]
+[gd_scene load_steps=3 format=3 uid="uid://chipqxppmffef"]
 
 [ext_resource type="Texture2D" uid="uid://b8nsht6r2bbno" path="res://icon.svg" id="1_a202f"]
-[ext_resource type="PackedScene" uid="uid://c07pc4xogbkhn" path="res://angel.glb" id="2_noarx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0tk4"]
 albedo_texture = ExtResource("1_a202f")
 
 [node name="Node3D" type="Node3D"]
 
-[node name="sample(3)" parent="." instance=ExtResource("2_noarx")]
-transform = Transform3D(-5, 0, -8.66025, 0, 10, 0, 8.66025, 0, -5, 12.7849, 2.63634, 10.4255)
-
 [node name="CSGBox3D4" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.2058, -0.341825, 18.1908)
+use_collision = true
 size = Vector3(32.9676, 1, 36.6339)
 material = SubResource("StandardMaterial3D_a0tk4")
