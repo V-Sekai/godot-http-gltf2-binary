@@ -1,24 +1,35 @@
 # http-glb-host-game-project
 
-The V-Sekai development community focuses on providing social VR functionality for the open-source Godot Engine.
+Welcome to the V-Sekai development community! We provide social VR features for the open-source [Godot Engine](https://godotengine.org/).
 
-## Quick start
+## Quick Start
 
-This starts a Godot Engine web server that exports the editor scene as a gltf2 binary.
+Follow these steps to set up the Godot Engine web server:
 
-Tested with [https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-153](https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-153).
+1. **Download the Editor:**
 
-`latest.v-sekai-editor-153` implements the DDS image writer `?compatible` flag to stream to VRChat.
+   Get the latest editor version from [here](https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-153).
 
-You should have fast internet access and use https://tailscale.com/kb/1223/funnel to proxy the local network to the internet with transport security.
+2. **Configure DDS Image Writer:**
 
-```bash
-tailscale funnel 8080
-# Start godot editor opened to this project
-```
+   The `latest.v-sekai-editor-153` includes the DDS image writer with the `?compatible` flag for VRChat streaming.
 
-## Test world
+3. **Set Up Network Proxy:**
 
-You can test the [vr-voyage/vrchat-glb-loader](https://github.com/vr-voyage/vrchat-glb-loader) in the following world :
+   Ensure you have a fast internet connection. Use [Tailscale Funnel](https://tailscale.com/kb/1223/funnel) to securely proxy your local network to the internet.
 
-https://vrchat.com/home/launch?worldId=wrld_a74abb7d-a423-44bb-a7ea-3bc5e8281dde
+4. **Start the Server:**
+
+   Open your terminal and run:
+
+   ```bash
+   tailscale funnel 8080
+   # Save the funnel link for sharing
+   # Then, open the Godot editor with this project
+   ```
+
+## Test the World
+
+Test the [VRChat GLB Loader](https://github.com/vr-voyage/vrchat-glb-loader) in the following world:
+
+[Launch the World](https://vrchat.com/home/launch?worldId=wrld_a74abb7d-a423-44bb-a7ea-3bc5e8281dde)
