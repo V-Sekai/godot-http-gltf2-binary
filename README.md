@@ -38,3 +38,7 @@ Test the [VRChat GLB Loader](https://github.com/vr-voyage/vrchat-glb-loader) in 
 Example Funnel URL compatible with the vr-voyage's world:
 
 https://example-funnel-url.ts.net?compatible
+
+Example Funnel URL compatible with Blender:
+
+https://example-funnel-url.ts.net
