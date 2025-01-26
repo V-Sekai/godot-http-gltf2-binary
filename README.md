@@ -10,7 +10,7 @@ Tested with [https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-
 
 `latest.v-sekai-editor-153` implements the DDS image writer `?compatible` flag to stream to VRChat.
 
-It is recommended that you have fast internet and use https://tailscale.com/kb/1223/funnel for proxying the local network to the internet with transport security.
+You should have fast internet access and use https://tailscale.com/kb/1223/funnel to proxy the local network to the internet with transport security.
 
 ```bash
 tailscale funnel 8080
