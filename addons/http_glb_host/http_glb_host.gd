@@ -8,11 +8,13 @@ extends EditorPlugin
 
 var http_server: TCPServer
 const PORT = 8080
-var MSFT_texture_dds: GLTFDocumentExtension = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
+var MSFT_texture_dds: GLTFDocumentExtension = null
 var compatible: bool = false
 
 func _enter_tree():
+	MSFT_texture_dds = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
 	GLTFDocument.register_gltf_document_extension(MSFT_texture_dds)
+	print("MSFT_texture_dds extension loaded.")
 	print(GLTFDocument.get_supported_gltf_extensions())
 	http_server = TCPServer.new()
 	var err_http: Error = http_server.listen(PORT)
@@ -21,7 +23,8 @@ func _enter_tree():
 		return
 
 func _exit_tree():
-	GLTFDocument.unregister_gltf_document_extension(MSFT_texture_dds)
+	if MSFT_texture_dds:
+		GLTFDocument.unregister_gltf_document_extension(MSFT_texture_dds)
 	if not http_server:
 		return
 	http_server.stop()
@@ -67,7 +70,7 @@ func _process(delta):
 	if path.is_empty() or path == "/":
 		var gltf_doc = GLTFDocument.new()
 		gltf_doc.image_format = "PNG"
-		if compatible:
+		if compatible and MSFT_texture_dds:
 			gltf_doc.image_format = "DDS" 
 		var state = GLTFState.new()
 		var flags = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS

@@ -6,6 +6,11 @@
 extends GLTFDocumentExtension
 
 func _import_preflight(state: GLTFState, extensions: PackedStringArray) -> Error:
+	var test_image: Image = Image.new()
+	if not test_image.has_method("save_dds_from_buffer"):
+		return ERR_SKIP;
+	if not test_image.has_method("save_dds"):
+		return ERR_SKIP;
 	if !extensions.has("MSFT_texture_dds"):
 		return ERR_SKIP;
 	return OK;
@@ -40,7 +45,7 @@ func _serialize_image_to_bytes(state: GLTFState, image: Image, image_dict: Dicti
 			image.generate_mipmaps()
 		if not image.is_compressed():
 			image.compress_from_channels(Image.COMPRESS_S3TC, Image.USED_CHANNELS_RGBA)
-		return image.save_dds_to_buffer()
+		return image.call("save_dds_to_buffer")
 	return PackedByteArray()
 
 func _save_image_at_path(state: GLTFState, image: Image, file_path: String, image_format: String, _lossy_quality: float) -> Error:
@@ -49,7 +54,7 @@ func _save_image_at_path(state: GLTFState, image: Image, file_path: String, imag
 			image.generate_mipmaps()
 		if not image.is_compressed():
 			image.compress_from_channels(Image.COMPRESS_S3TC, Image.USED_CHANNELS_RGBA)
-		return image.save_dds(file_path)
+		return image.call("save_dds", file_path)
 		
 	return ERR_INVALID_PARAMETER
 
