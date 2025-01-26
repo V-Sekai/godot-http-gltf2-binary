@@ -14,3 +14,9 @@ It is recommended you have fast internet and that you use https://tailscale.com/
 tailscale funnel 8080
 # Start godot editor opened to this project
 ```
+
+## Test world
+
+You can test the loader in the following world :
+
+https://vrchat.com/home/launch?worldId=wrld_a74abb7d-a423-44bb-a7ea-3bc5e8281dde
