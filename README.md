@@ -24,6 +24,7 @@ Follow these steps to set up the Godot Engine web server:
 
    ```bash
    tailscale funnel 8080
+   # Example Funnel URL: https://example-funnel-url.ts.net?compatible
    # Save the funnel link for sharing
    # Then, open the Godot editor with this project
    ```
@@ -33,3 +34,7 @@ Follow these steps to set up the Godot Engine web server:
 Test the [VRChat GLB Loader](https://github.com/vr-voyage/vrchat-glb-loader) in the following world:
 
 [Launch the World](https://vrchat.com/home/launch?worldId=wrld_a74abb7d-a423-44bb-a7ea-3bc5e8281dde)
+
+Example Funnel URL compatible with the vr-voyage's world:
+
+https://example-funnel-url.ts.net?compatible
