@@ -8,8 +8,11 @@ extends EditorPlugin
 
 var http_server: TCPServer
 const PORT = 8080
+const GET_DEBOUNCE_TIME = 5.0
 var MSFT_texture_dds: GLTFDocumentExtension = null
 var compatible: bool = false
+var last_request_time: float = 0.0
+var last_glb_data: PackedByteArray = PackedByteArray()
 
 func _enter_tree():
 	MSFT_texture_dds = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
@@ -50,35 +53,37 @@ func _process(delta):
 	if not request.begins_with("GET "):
 		send_bad_request(http_client, "Invalid request.")
 		return
-	
 	var path_end = request.find(" HTTP/")
 	if path_end == -1:
 		path_end = request.length()
-	
 	var full_path = request.substr(4, path_end - 4).strip_edges()
 	var query_string = ""
 	var path = full_path
-	
 	if full_path.find("?") != -1:
 		var parts = full_path.split("?", false, 2)
 		path = parts[0]
 		query_string = parts[1]
-	
 	compatible = query_string.find("compatible") != -1
-	var glb_data: PackedByteArray = PackedByteArray()
-	
+
+	var current_time = Time.get_unix_time_from_system()
+	var glb_data = PackedByteArray()
 	if path.is_empty() or path == "/":
-		var gltf_doc = GLTFDocument.new()
-		gltf_doc.image_format = "PNG"
-		if compatible and MSFT_texture_dds:
-			gltf_doc.image_format = "DDS" 
-		var state = GLTFState.new()
-		var flags = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
-		var error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state, flags)
-		if error != OK:
-			push_error("GLTF export error: " + str(error))
-			return
-		glb_data = gltf_doc.generate_buffer(state)
+		if last_request_time > 0 and (current_time - last_request_time) <= GET_DEBOUNCE_TIME and last_glb_data.size() > 0:
+			glb_data = last_glb_data
+		else:
+			var gltf_doc = GLTFDocument.new()
+			gltf_doc.image_format = "PNG"
+			if compatible and MSFT_texture_dds:
+				gltf_doc.image_format = "DDS"
+			var state = GLTFState.new()
+			var flags = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
+			var error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state, flags)
+			if error != OK:
+				push_error("GLTF export error: " + str(error))
+				return
+			glb_data = gltf_doc.generate_buffer(state)
+			last_glb_data = glb_data
+		last_request_time = current_time
 	else:
 		send_bad_request(http_client, "Invalid path.")
 		return
