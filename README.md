@@ -1,6 +1,6 @@
 # http-glb-host-game-project
 
-V-Sekai development community focuses on providing social VR functionality for the open-source Godot Engine.
+The V-Sekai development community focuses on providing social VR functionality for the open-source Godot Engine.
 
 ## Quick start
 
