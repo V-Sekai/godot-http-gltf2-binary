@@ -8,8 +8,12 @@ extends EditorPlugin
 
 var http_server: TCPServer
 const PORT = 8080
+var MSFT_texture_dds : GLTFDocumentExtension = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
+var compatible: bool = false
 
 func _enter_tree():
+	GLTFDocument.register_gltf_document_extension(MSFT_texture_dds)
+	print(GLTFDocument.get_supported_gltf_extensions())
 	http_server = TCPServer.new()
 	var err_http: Error = http_server.listen(PORT)
 	if err_http != OK:
@@ -17,6 +21,7 @@ func _enter_tree():
 		return
 
 func _exit_tree():
+	GLTFDocument.unregister_gltf_document_extension(MSFT_texture_dds)
 	if not http_server:
 		return
 	http_server.stop()
@@ -34,28 +39,50 @@ func _process(delta):
 	else:
 		http_client.disconnect_from_host()
 		return
-	if not request.begins_with("GET / "):
+
+	if not request.begins_with("GET "):
 		var error_response = "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nInvalid request."
 		http_client.put_data(error_response.to_utf8_buffer())
 		http_client.disconnect_from_host()
 		return
-	var gltf_doc: GLTFDocument = GLTFDocument.new()
-	var state: GLTFState = GLTFState.new()
-	var flags: int = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
-	# TODO: Async duplicate the tree. fire 2025-01-25
-	var error: Error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state, flags)
+
+	var path_end = request.find(" HTTP/")
+	if path_end == -1:
+		path_end = request.length()
+	var full_path = request.substr(4, path_end - 4).strip_edges()
+	var query_string = ""
+	var path = full_path
+	if full_path.find("?") != -1:
+		var parts = full_path.split("?", false, 2)
+		path = parts[0]
+		query_string = parts[1]
+	compatible = query_string.find("compatible") != -1
 	var glb_data: PackedByteArray = PackedByteArray()
-	if error != OK:
-		glb_data = PackedByteArray()
-		push_error("GLTF export error: " + str(error))
+	if path.is_empty() or path == "/":
+		var gltf_doc = GLTFDocument.new()
+		if compatible:
+			gltf_doc.image_format = "DDS"
+		else:
+			gltf_doc.image_format = "PNG"
+		var state = GLTFState.new()
+		var flags = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
+		var error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state, flags)
+		if error == OK:
+			glb_data = gltf_doc.generate_buffer(state)
+		else:
+			push_error("GLTF export error: " + str(error))
 	else:
-		glb_data = gltf_doc.generate_buffer(state)
+		var invalid_response = "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nInvalid path."
+		http_client.put_data(invalid_response.to_utf8_buffer())
+		http_client.disconnect_from_host()
+		return
+
 	if glb_data.size() > 0:
-		var response: String = "HTTP/1.1 200 OK\r\nContent-Type: model/gltf-binary\r\nContent-Disposition: attachment; filename=\"model.glb\"\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % glb_data.size()
+		var response = "HTTP/1.1 200 OK\r\nContent-Type: model/gltf-binary\r\nContent-Disposition: attachment; filename=\"model.glb\"\r\nContent-Length: %d\r\nConnection: close\r\n\r\n" % glb_data.size()
 		http_client.put_data(response.to_utf8_buffer())
 		http_client.put_data(glb_data)
 	else:
-		var error_response: String = "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nGLB data not available."
+		var error_response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nGLB data not available."
 		http_client.put_data(error_response.to_utf8_buffer())
-	
+
 	http_client.disconnect_from_host()
