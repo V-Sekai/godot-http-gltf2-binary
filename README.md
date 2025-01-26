@@ -6,7 +6,7 @@ The V-Sekai development community focuses on providing social VR functionality f
 
 This starts a Godot Engine web server that exports the editor scene as a gltf2 binary.
 
-Tested with [https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-152](https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-153).
+Tested with [https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-153](https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-153).
 
 `latest.v-sekai-editor-153` implements the DDS image writer `?compatible` flag to stream to VRChat.
 
