@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://chipqxppmffef"]
+[gd_scene load_steps=4 format=3 uid="uid://chipqxppmffef"]
 
 [ext_resource type="Texture2D" uid="uid://b8nsht6r2bbno" path="res://icon.svg" id="1_a202f"]
 [ext_resource type="PackedScene" uid="uid://c07pc4xogbkhn" path="res://angel.glb" id="2_noarx"]
@@ -6,31 +6,12 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0tk4"]
 albedo_texture = ExtResource("1_a202f")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wc5p8"]
-albedo_color = Color(0.0769564, 0.289458, 0.188947, 1)
-
 [node name="Node3D" type="Node3D"]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.32525, -0.138799, 3.46815)
-use_collision = true
-size = Vector3(6.85991, 1, 7.93631)
-material = SubResource("StandardMaterial3D_a0tk4")
+[node name="sample(3)" parent="." instance=ExtResource("2_noarx")]
+transform = Transform3D(-5, 0, -8.66025, 0, 10, 0, 8.66025, 0, -5, 12.7849, 2.63634, 10.4255)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGBox3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.46919, 0.826939, -4.71577)
-size = Vector3(28.4488, 1, 1.57968)
-material = SubResource("StandardMaterial3D_wc5p8")
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGBox3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.201, 0, 0)
-size = Vector3(4.59459, 1, 7.93631)
-material = SubResource("StandardMaterial3D_a0tk4")
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGBox3D/CSGBox3D3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.89166, -0.377963, 14.3488)
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.2058, -0.341825, 18.1908)
 size = Vector3(32.9676, 1, 36.6339)
 material = SubResource("StandardMaterial3D_a0tk4")
-
-[node name="sample(3)" parent="." instance=ExtResource("2_noarx")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -4.43679, 2.4614, 1.05161)
