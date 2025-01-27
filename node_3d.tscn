@@ -6,13 +6,14 @@
 albedo_texture = ExtResource("1_a202f")
 
 [sub_resource type="TextMesh" id="TextMesh_a202f"]
-text = "2025-01-27T03:59:21Z"
+text = "2025-01-27T05:48:59Z"
 curve_step = 10.0
 
 [node name="Node3D" type="Node3D"]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 12, 0, 12)
+use_collision = true
 size = Vector3(25, 0.1, 25)
 material = SubResource("StandardMaterial3D_a202f")
 
