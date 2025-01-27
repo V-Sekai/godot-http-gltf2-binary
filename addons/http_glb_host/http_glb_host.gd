@@ -108,17 +108,20 @@ func _process(delta):
 func add_csg_mesh_with_timestamp():
 	var root_node = get_editor_interface().get_edited_scene_root()
 	var existing_node = root_node.get_node_or_null("ISODatetime")
+	var curve_step = 10
 	if existing_node:
 		if existing_node is CSGMesh3D:
 			var iso_datetime = Time.get_datetime_string_from_system(true)
 			if existing_node.mesh is TextMesh:
 				existing_node.mesh.text = iso_datetime + "Z"
+				csg_mesh.curve_step = curve_step
 	else:
 		if not existing_node:
 			var array_mesh: TextMesh = TextMesh.new()
 			var iso_datetime = Time.get_datetime_string_from_system(true)
 			array_mesh.text = iso_datetime + "Z"
 			csg_mesh.mesh = array_mesh
+			csg_mesh.curve_step = curve_step
 			csg_mesh.name = "ISODatetime"
 			csg_mesh.transform.origin = Vector3(0, 1, 0)
 			root_node.add_child(csg_mesh)

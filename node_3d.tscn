@@ -6,7 +6,8 @@
 albedo_texture = ExtResource("1_a202f")
 
 [sub_resource type="TextMesh" id="TextMesh_a202f"]
-text = "2025-01-27T03:57:16Z"
+text = "2025-01-27T03:59:21Z"
+curve_step = 10.0
 
 [node name="Node3D" type="Node3D"]
 
