@@ -114,14 +114,14 @@ func add_csg_mesh_with_timestamp():
 			var iso_datetime = Time.get_datetime_string_from_system(true)
 			if existing_node.mesh is TextMesh:
 				existing_node.mesh.text = iso_datetime + "Z"
-				csg_mesh.curve_step = curve_step
+				existing_node.mesh.curve_step = curve_step
 	else:
 		if not existing_node:
 			var array_mesh: TextMesh = TextMesh.new()
 			var iso_datetime = Time.get_datetime_string_from_system(true)
 			array_mesh.text = iso_datetime + "Z"
+			array_mesh.curve_step = curve_step
 			csg_mesh.mesh = array_mesh
-			csg_mesh.curve_step = curve_step
 			csg_mesh.name = "ISODatetime"
 			csg_mesh.transform.origin = Vector3(0, 1, 0)
 			root_node.add_child(csg_mesh)
