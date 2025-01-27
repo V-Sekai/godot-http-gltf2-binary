@@ -14,7 +14,10 @@ var compatible: bool = false
 var last_request_time: float = 0.0
 var last_glb_data: PackedByteArray = PackedByteArray()
 
+var csg_mesh: CSGMesh3D = null
+
 func _enter_tree():
+	csg_mesh = CSGMesh3D.new()
 	MSFT_texture_dds = preload("res://addons/http_glb_host/MSFT_texture_dds.gd").new()
 	GLTFDocument.register_gltf_document_extension(MSFT_texture_dds)
 	print("MSFT_texture_dds extension loaded.")
@@ -26,6 +29,8 @@ func _enter_tree():
 		return
 
 func _exit_tree():
+	if csg_mesh:
+		csg_mesh.queue_free()
 	if MSFT_texture_dds:
 		GLTFDocument.unregister_gltf_document_extension(MSFT_texture_dds)
 	if not http_server:
@@ -68,6 +73,7 @@ func _process(delta):
 	var current_time = Time.get_unix_time_from_system()
 	var glb_data = PackedByteArray()
 	if path.is_empty() or path == "/":
+		var root_node = get_editor_interface().get_edited_scene_root()
 		if last_request_time > 0 and (current_time - last_request_time) <= GET_DEBOUNCE_TIME and last_glb_data.size() > 0:
 			glb_data = last_glb_data
 		else:
@@ -77,12 +83,15 @@ func _process(delta):
 				gltf_doc.image_format = "DDS"
 			var state = GLTFState.new()
 			var flags = EditorSceneFormatImporter.IMPORT_USE_NAMED_SKIN_BINDS | EditorSceneFormatImporter.IMPORT_GENERATE_TANGENT_ARRAYS
-			var error = gltf_doc.append_from_scene(get_editor_interface().get_edited_scene_root(), state, flags)
+			var error = gltf_doc.append_from_scene(root_node, state, flags)
 			if error != OK:
 				push_error("GLTF export error: " + str(error))
 				return
 			glb_data = gltf_doc.generate_buffer(state)
 			last_glb_data = glb_data
+
+			add_csg_mesh_with_timestamp()
+
 		last_request_time = current_time
 	else:
 		send_bad_request(http_client, "Invalid path.")
@@ -94,8 +103,26 @@ func _process(delta):
 		http_client.put_data(glb_data)
 	else:
 		send_not_found(http_client, "GLB data not available.")
-	
 	http_client.disconnect_from_host()
+
+func add_csg_mesh_with_timestamp():
+	var root_node = get_editor_interface().get_edited_scene_root()
+	var existing_node = root_node.get_node_or_null("ISODatetime")
+	if existing_node:
+		if existing_node is CSGMesh3D:
+			var iso_datetime = Time.get_datetime_string_from_system(true)
+			if existing_node.mesh is TextMesh:
+				existing_node.mesh.text = iso_datetime + "Z"
+	else:
+		if not existing_node:
+			var array_mesh: TextMesh = TextMesh.new()
+			var iso_datetime = Time.get_datetime_string_from_system(true)
+			array_mesh.text = iso_datetime + "Z"
+			csg_mesh.mesh = array_mesh
+			csg_mesh.name = "ISODatetime"
+			csg_mesh.transform.origin = Vector3(0, 1, 0)
+			root_node.add_child(csg_mesh)
+			csg_mesh.owner = root_node
 
 func send_bad_request(client, message):
 	var error_response = "HTTP/1.1 400 Bad Request\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\n" + message
