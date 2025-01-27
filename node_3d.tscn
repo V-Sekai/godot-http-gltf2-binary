@@ -1,12 +1,48 @@
-[gd_scene load_steps=4 format=3 uid="uid://chipqxppmffef"]
+[gd_scene load_steps=16 format=3 uid="uid://chipqxppmffef"]
 
 [ext_resource type="Texture2D" uid="uid://b8nsht6r2bbno" path="res://icon.svg" id="1_a202f"]
+[ext_resource type="Script" uid="uid://dj50gwf4jwnnb" path="res://addons/proton_scatter/src/scatter.gd" id="2_wc5p8"]
+[ext_resource type="Script" uid="uid://bgh3as8f3p0ex" path="res://addons/proton_scatter/src/stack/modifier_stack.gd" id="3_jsk3o"]
+[ext_resource type="Script" uid="uid://bx728lmlcjfb" path="res://addons/proton_scatter/src/modifiers/base_modifier.gd" id="4_4arys"]
+[ext_resource type="Script" uid="uid://lhudpkhf85jk" path="res://addons/proton_scatter/src/scatter_item.gd" id="5_6iypd"]
+[ext_resource type="Script" uid="uid://ckx4hijdxwdrr" path="res://addons/proton_scatter/src/modifiers/create_inside_grid.gd" id="5_jsk3o"]
+[ext_resource type="Script" uid="uid://hx544f033ux2" path="res://addons/proton_scatter/src/modifiers/randomize_rotation.gd" id="6_4arys"]
+[ext_resource type="Script" uid="uid://bl5n1wwy636k5" path="res://addons/proton_scatter/src/scatter_shape.gd" id="6_tereu"]
+[ext_resource type="Script" uid="uid://smk3xpn6cmjr" path="res://addons/proton_scatter/src/shapes/box_shape.gd" id="7_jsk3o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a202f"]
 albedo_texture = ExtResource("1_a202f")
 
+[sub_resource type="Resource" id="Resource_2yde8"]
+script = ExtResource("5_jsk3o")
+spacing = Vector3(2, 2, 2)
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = true
+reference_frame = 0
+
+[sub_resource type="Resource" id="Resource_id0nj"]
+script = ExtResource("6_4arys")
+rotation = Vector3(0, 15, 0)
+snap_angle = Vector3(0, 0, 0)
+enabled = true
+override_global_seed = false
+custom_seed = 0
+restrict_height = false
+reference_frame = 2
+
+[sub_resource type="Resource" id="Resource_1q667"]
+script = ExtResource("3_jsk3o")
+stack = Array[ExtResource("4_4arys")]([SubResource("Resource_2yde8"), SubResource("Resource_id0nj")])
+
+[sub_resource type="Resource" id="Resource_4arys"]
+script = ExtResource("7_jsk3o")
+size = Vector3(10.735, 1, 4.70669)
+metadata/_custom_type_script = ExtResource("7_jsk3o")
+
 [sub_resource type="TextMesh" id="TextMesh_a202f"]
-text = "2025-01-27T05:48:59Z"
+text = "2025-01-27T19:50:34Z"
 curve_step = 10.0
 
 [node name="Node3D" type="Node3D"]
@@ -16,6 +52,31 @@ transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 12, 0, 1
 use_collision = true
 size = Vector3(25, 0.1, 25)
 material = SubResource("StandardMaterial3D_a202f")
+
+[node name="ProtonScatter" type="Node3D" parent="CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.383744, 0)
+script = ExtResource("2_wc5p8")
+render_mode = 1
+enable_updates_in_game = true
+modifier_stack = SubResource("Resource_1q667")
+Performance/use_chunks = true
+Performance/chunk_dimensions = Vector3(15, 15, 15)
+metadata/_custom_type_script = ExtResource("2_wc5p8")
+
+[node name="ScatterShape" type="Node3D" parent="CSGBox3D/ProtonScatter"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.181213, 0.302172, 0.906348)
+script = ExtResource("6_tereu")
+shape = SubResource("Resource_4arys")
+
+[node name="ScatterItem" type="Node3D" parent="CSGBox3D/ProtonScatter"]
+script = ExtResource("5_6iypd")
+source = 0
+path = "character"
+metadata/_custom_type_script = ExtResource("5_6iypd")
+
+[node name="character" type="CSGBox3D" parent="CSGBox3D/ProtonScatter/ScatterItem"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.35061, 0.416256, 2.37763)
+visible = false
 
 [node name="ISODatetime" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
