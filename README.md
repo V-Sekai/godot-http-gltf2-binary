@@ -1,4 +1,4 @@
-# http-glb-host-game-project
+# http-glb-gltf2-binary
 
 Welcome to the V-Sekai development community! We provide social VR features for the open-source [Godot Engine](https://godotengine.org/).
 
