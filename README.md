@@ -24,7 +24,7 @@ Follow these steps to set up the Godot Engine web server:
 
    ```bash
    tailscale funnel 8080
-   # Example Funnel URL: https://example-funnel-url.ts.net?compatible
+   # Example Funnel URL: https://example-funnel-url.ts.net
    # Save the funnel link for sharing
    # Then, open the Godot editor with this project
    ```
