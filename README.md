@@ -42,3 +42,5 @@ https://example-funnel-url.ts.net?compatible
 Example Funnel URL compatible with Blender:
 
 https://example-funnel-url.ts.net
+
+See also https://github.com/microsoft/glTF-Toolkit/releases/tag/v1.7.0
