@@ -12,7 +12,7 @@ Follow these steps to set up the Godot Engine web server:
 
 2. **Configure DDS Image Writer:**
 
-   The `latest.v-sekai-editor-153` includes the DDS image writer with the `?compatible` flag for VRChat streaming.
+   The godot engine editor includes the DDS image writer with the `?compatible` flag for VRChat streaming.
 
 3. **Set Up Network Proxy:**
 
