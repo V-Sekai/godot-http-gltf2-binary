@@ -8,7 +8,7 @@ Follow these steps to set up the Godot Engine web server:
 
 1. **Download the Editor:**
 
-   Get the latest editor version from [here](https://github.com/V-Sekai/world-godot/releases/tag/latest.v-sekai-editor-153).
+   Get the latest Godot Engine 4.4 editor.
 
 2. **Configure DDS Image Writer:**
 
