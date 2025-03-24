@@ -8,7 +8,7 @@ Follow these steps to set up the Godot Engine web server:
 
 1. **Download the Editor:**
 
-   Get the latest Godot Engine 4.4 editor.
+   Get the latest Godot Engine 4.5 editor. (As of today 2025-03-24, there are no 4.5 releases)
 
 2. **Configure DDS Image Writer:**
 
